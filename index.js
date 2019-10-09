@@ -22,7 +22,7 @@ class SignalingClientComponent {
   constructor($scope, signalingClient) {
     this.signalingClient = signalingClient
     this.$scope = $scope
-    this.url = signalingClient.signalingServerUrl.replace('ws://', '')
+    this.url = signalingClient.signalingServerUrl
     this.status = 'connecting'
     this.updateStatus()
   }
