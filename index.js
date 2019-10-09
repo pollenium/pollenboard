@@ -1,6 +1,7 @@
 const client = new pollenium.Client({
   signalingServerUrls: [
-    'ws://sigserve-us-1.herokuapp.com:80'
+    'ws://sigserve-us-1.herokuapp.com:80',
+    'ws://sigserve-eu-1.herokuapp.com:80',
   ],
   bootstrapOffersTimeout: 0,
   signalTimeout: 5,
