@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css" integrity="sha256-Nfu23DiRqsrx/6B6vsI0T9vEVKq1M6KgO8+TV363g3s=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body ng-app="app">
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-4">Welcome to Pollenboard</h1>
+        <p class="lead">Pollenboard is a decentralized and censorship-resistant ephemeral message board built on the <a href="">Pollenium</a> meshnet.</p>
+        <hr class="my-4">
+        <p>To learn how you can build your own dApps like Pollenboard, check out the <a href="">Building Pollenboard Walkthrough</a>.</p>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-4">
+          <div ng-controller="Client">
+            <h5>Client Info</h5>
+            <hr>
+            <h6>Nonce</h6>
+            <div class="ellipsis">
+              0x{{clientNonceHex}}
+            </div>
+          </div>
+          <br/>
+          <div ng-controller="SignalingServers">
+            <h5>Signaling Servers</h5>
+            <hr>
+            <div class="item ellipsis" ng-repeat="signalingClientComponent in signalingClientComponents">
+              <span
+                class="dot"
+                ng-class="signalingClientComponent.getBgClass()">
+              </span>
+              {{signalingClientComponent.url}}
+            </div>
+          </div>
+          <br/>
+          <div ng-controller="Peers">
+            <h5>Peers ({{peerComponents.length}}/6)</h5>
+            <hr>
+            <div class="item" ng-repeat="peerComponent in peerComponents">
+              <span
+                class="dot"
+                ng-class="peerComponent.getBgClass()"
+                >
+              </span>
+              {{peerComponent.ipString}}
+              <br/>
+              <small class="muted ellipsis">0x{{peerComponent.friend.peerClientNonce.getHex()}}</small>
+            </div>
+          </div>
+        </div>
+        <div class="col" ng-controller="Messages">
+          <div class="alert alert-info" ng-show="!isConnected">
+            <div class="spinner-grow spinner-grow-sm text-info" role="status"></div>
+            Connecting to peers. This may take a minute.
+          </div>
+          <div ng-show="isConnected">
+            <h5>Messages</h5>
+            <hr>
+            <div class="post">
+              <form ng-submit="post()">
+                <div class="input-group mb-3">
+                  <input
+                    ng-model="messageBodyUtf8"
+                    type="text"
+                    class="form-control"
+                    placeholder="Post something to Pollenboard"
+                    aria-label="Post something to Pollenboard"
+                    aria-describedby="post-button">
+                  <div class="input-group-append">
+                    <button
+                      ng-disabled="!messageBodyUtf8"
+                      class="btn btn-secondary"
+                      type="submit"
+                      id="post-button">
+                        Post
+                    </button>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="messages">
+              <div class="message" ng-repeat="messageComponent in messageComponents">
+                <div>{{messageComponent.bodyUtf8}}</div>
+                <small class="text-muted">
+                  <span ng-if="!messageComponent.isUsers">
+                    Received {{messageComponent.receivedAt | timeAgo}}
+                  </span>
+                  <span ng-if="messageComponent.isUsers && messageComponent.isBroadcast">
+                    Broadcast {{messageComponent.broadcastAt | timeAgo }}
+                  </span>
+                  <span ng-if="messageComponent.isUsers && !messageComponent.isBroadcast">
+                    Computing proof of work
+                  </span>
+                </small>
+                <div class="progress" ng-if="messageComponent.isUsers && !messageComponent.isBroadcast">
+                  <div
+                    class="progress-bar"
+                    role="progressbar"
+                    style="width:{{messageComponent.powProgress * 100}}%"
+                    aria-valuenow="10"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+    </div>
+    <script src="../protocol/browser/index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.bundle.js" integrity="sha256-pVreZ67fRaATygHF6T+gQtF1NI700W9kzeAivu6au9U=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js" integrity="sha256-23hi0Ag650tclABdGCdMNSjxvikytyQ44vYGo9HyOrU=" crossorigin="anonymous"></script>
+    <script src="./bower_components/angular-timeago/dist/angular-timeago.js"></script>
+    <script src="./index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "pollenboard",
+  "main": "index.js",
+  "authors": [
+    "Aakil Fernandes <aakilfernandes@gmail.com>"
+  ],
+  "description": "",
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular-timeago": "^0.4.6"
+  }
+}
