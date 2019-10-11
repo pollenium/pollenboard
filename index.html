@@ -82,7 +82,7 @@
               </form>
             </div>
             <div class="messages">
-              <div class="message" ng-repeat="messageComponent in messageComponents">
+              <div class="message" ng-repeat="messageComponent in messageComponents | reverse">
                 <div>{{messageComponent.bodyUtf8}}</div>
                 <small class="text-muted">
                   <span ng-if="!messageComponent.isUsers">

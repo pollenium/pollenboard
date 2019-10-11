@@ -199,3 +199,9 @@ app.controller('Messages', ($scope) => {
     $scope.$apply()
   })
 })
+
+app.filter('reverse', function() {
+  return function(items) {
+    return items.slice().reverse();
+  }
+})
