@@ -10,7 +10,7 @@ const client = new pollenium.Client({
   friendsMax: 6,
   Worker: Worker,
   WebSocket: WebSocket,
-  hashcashWorkerUrl: '/protocol/browser/hashcash-worker.js'
+  hashcashWorkerUrl: './lib/hashcash-worker.js'
 })
 const applicationId = pollenium.Bytes.fromUtf8('pollenboard').getPaddedLeft(32)
 
