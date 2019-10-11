@@ -2,8 +2,8 @@ const wsProtocol = document.location.protocol === 'https:' ? 'wss' : 'ws'
 
 const client = new pollenium.Client({
   signalingServerUrls: [
-    `${wsProtocol}://sigserve-us-1.herokuapp.com:80`,
-    `${wsProtocol}://sigserve-eu-1.herokuapp.com:80`,
+    `${wsProtocol}://begonia-us-1.herokuapp.com`,
+    `${wsProtocol}://begonia-eu-1.herokuapp.com`,
   ],
   bootstrapOffersTimeout: 0,
   signalTimeout: 5,
