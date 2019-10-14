@@ -7,7 +7,7 @@ const client = new pollenium.Client({
   ],
   bootstrapOffersTimeout: 0,
   signalTimeout: 5,
-  friendsMax: 6,
+  friendshipsMax: 6,
   Worker: Worker,
   WebSocket: WebSocket,
   hashcashWorkerUrl: './lib/pollenium-anemone/hashcash-worker.js'
@@ -46,7 +46,7 @@ class SignalingClientComponent {
   }
 }
 
-class MessageComponent {
+class MissiveComponent {
   constructor($scope, body, isUsers) {
     this.$scope = $scope
     this.body = body
@@ -72,14 +72,14 @@ class MessageComponent {
       this.increasePowProgress()
     }, 1000)
 
-    const friendMessageGenerator = new pollenium.FriendMessageGenerator(
+    const missiveGenerator = new pollenium.MissiveGenerator(
       client,
       applicationId,
       this.body,
       8
     )
-    const friendMessage = await friendMessageGenerator.fetchFriendMessage()
-    friendMessage.broadcast()
+    const missive = await missiveGenerator.fetchMissive()
+    missive.broadcast()
     this.isBroadcast = true
     this.broadcastAt = new Date
     clearInterval(this.powProgressInterval)
@@ -97,17 +97,17 @@ function extractIpString(offer) {
   return ipLineParts[ipLineParts.length - 1]
 }
 
-class PeerComponent {
-  constructor($scope, friend) {
+class FriendshipComponent {
+  constructor($scope, friendship) {
     this.$scope = $scope
-    this.friend = friend
-    this.friend.on('status', (status) => {
+    this.friendship = friendship
+    this.friendship.on('status', (status) => {
       this.$scope.$apply()
     })
     this.updateIpString()
   }
   getBgClass() {
-    switch(this.friend.status) {
+    switch(this.friendship.status) {
       case 0:
         return 'bg-default'
       case 1:
@@ -119,10 +119,10 @@ class PeerComponent {
     }
   }
   async fetchIpString() {
-    if (this.friend.offer) {
-      return extractIpString(this.friend.offer)
+    if (this.friendship.offer) {
+      return extractIpString(this.friendship.offer)
     }
-    const offer = await this.friend.fetchOffer()
+    const offer = await this.friendship.fetchOffer()
     return extractIpString(offer)
   }
   async updateIpString() {
@@ -145,57 +145,57 @@ function getFriends() {
   return client.introverts.concat(client.extroverts)
 }
 
-app.controller('Peers', async function SignalingServersController($scope) {
+app.controller('Friendships', async function SignalingServersController($scope) {
 
-  $scope.peerComponents = []
+  $scope.friendshipComponents = []
 
-  function setPeerComponents() {
-    $scope.peerComponents = getFriends().filter((friend) => {
-      return friend.status !== 0
-    }).map((friend) => {
-      return new PeerComponent($scope, friend)
+  function setFriendshipComponents() {
+    $scope.friendshipComponents = getFriends().filter((friendship) => {
+      return friendship.status !== 0
+    }).map((friendship) => {
+      return new FriendshipComponent($scope, friendship)
     })
     $scope.$apply()
   }
 
-  client.on('friend', setPeerComponents)
-  client.on('friend.status', setPeerComponents)
+  client.on('friendship', setFriendshipComponents)
+  client.on('friendship.status', setFriendshipComponents)
 
 })
 
-app.controller('Messages', ($scope) => {
+app.controller('Missives', ($scope) => {
   function setIsConnected() {
-    $scope.isConnected = getFriends().filter((friend) => {
-      return friend.status === 2
+    $scope.isConnected = getFriends().filter((friendship) => {
+      return friendship.status === 2
     }).length > 0
     $scope.$apply()
   }
 
-  client.on('friend', setIsConnected)
-  client.on('friend.status', setIsConnected)
+  client.on('friendship', setIsConnected)
+  client.on('friendship.status', setIsConnected)
 
-  $scope.messageComponents = []
+  $scope.missiveComponents = []
 
   $scope.post = () => {
-    const messageComponent = new MessageComponent(
+    const missiveComponent = new MissiveComponent(
       $scope,
-      pollenium.Bytes.fromUtf8($scope.messageBodyUtf8),
+      pollenium.Bytes.fromUtf8($scope.missiveBodyUtf8),
       true
     )
-    $scope.messageComponents.push(messageComponent)
-    $scope.messageBodyUtf8 = ''
+    $scope.missiveComponents.push(missiveComponent)
+    $scope.missiveBodyUtf8 = ''
     setTimeout(() => {
-      messageComponent.broadcast()
+      missiveComponent.broadcast()
     })
   }
 
-  client.on('friend.message', (friendMessage) => {
-    if (!friendMessage.applicationId.equals(applicationId)) {
+  client.on('friendship.missive', (missive) => {
+    if (!missive.applicationId.equals(applicationId)) {
       return
     }
-    const messageComponent = new MessageComponent($scope, friendMessage.applicationData, false)
-    messageComponent.receivedAt = new Date
-    $scope.messageComponents.push(messageComponent)
+    const missiveComponent = new MissiveComponent($scope, missive.applicationData, false)
+    missiveComponent.receivedAt = new Date
+    $scope.missiveComponents.push(missiveComponent)
     $scope.$apply()
   })
 })

@@ -7,7 +7,7 @@
     <div class="jumbotron">
       <div class="container">
         <h1 class="display-4">Welcome to Pollenboard</h1>
-        <p class="lead">Pollenboard is a decentralized and censorship-resistant ephemeral message board built on the <a href="https://pollenium.network">Pollenium</a> meshnet.</p>
+        <p class="lead">Pollenboard is a decentralized and censorship-resistant ephemeral missive board built on the <a href="https://pollenium.network">Pollenium</a> meshnet.</p>
       </div>
     </div>
     <div class="container">
@@ -34,34 +34,34 @@
             </div>
           </div>
           <br/>
-          <div ng-controller="Peers">
-            <h5>Peers ({{peerComponents.length}}/6)</h5>
+          <div ng-controller="Friendships">
+            <h5>Friendships ({{friendshipComponents.length}}/6)</h5>
             <hr>
-            <div class="item" ng-repeat="peerComponent in peerComponents">
+            <div class="item" ng-repeat="friendshipComponent in friendshipComponents">
               <span
                 class="dot"
-                ng-class="peerComponent.getBgClass()"
+                ng-class="friendshipComponent.getBgClass()"
                 >
               </span>
-              {{peerComponent.ipString}}
+              {{friendshipComponent.ipString}}
               <br/>
-              <small class="muted ellipsis">0x{{peerComponent.friend.peerClientNonce.getHex()}}</small>
+              <small class="muted ellipsis">0x{{friendshipComponent.friendship.peerClientNonce.getHex()}}</small>
             </div>
           </div>
         </div>
-        <div class="col" ng-controller="Messages">
+        <div class="col" ng-controller="Missives">
           <div class="alert alert-info" ng-show="!isConnected">
             <div class="spinner-grow spinner-grow-sm text-info" role="status"></div>
             Connecting to peers. This may take a minute.
           </div>
           <div ng-show="isConnected">
-            <h5>Messages</h5>
+            <h5>Missives</h5>
             <hr>
             <div class="post">
               <form ng-submit="post()">
                 <div class="input-group mb-3">
                   <input
-                    ng-model="messageBodyUtf8"
+                    ng-model="missiveBodyUtf8"
                     type="text"
                     class="form-control"
                     placeholder="Post something to Pollenboard"
@@ -69,7 +69,7 @@
                     aria-describedby="post-button">
                   <div class="input-group-append">
                     <button
-                      ng-disabled="!messageBodyUtf8"
+                      ng-disabled="!missiveBodyUtf8"
                       class="btn btn-secondary"
                       type="submit"
                       id="post-button">
@@ -79,25 +79,25 @@
                 </div>
               </form>
             </div>
-            <div class="messages">
-              <div class="message" ng-repeat="messageComponent in messageComponents | reverse">
-                <div>{{messageComponent.bodyUtf8}}</div>
+            <div class="missives">
+              <div class="missive" ng-repeat="missiveComponent in missiveComponents | reverse">
+                <div>{{missiveComponent.bodyUtf8}}</div>
                 <small class="text-muted">
-                  <span ng-if="!messageComponent.isUsers">
-                    Received {{messageComponent.receivedAt | timeAgo}}
+                  <span ng-if="!missiveComponent.isUsers">
+                    Received {{missiveComponent.receivedAt | timeAgo}}
                   </span>
-                  <span ng-if="messageComponent.isUsers && messageComponent.isBroadcast">
-                    Broadcast {{messageComponent.broadcastAt | timeAgo }}
+                  <span ng-if="missiveComponent.isUsers && missiveComponent.isBroadcast">
+                    Broadcast {{missiveComponent.broadcastAt | timeAgo }}
                   </span>
-                  <span ng-if="messageComponent.isUsers && !messageComponent.isBroadcast">
+                  <span ng-if="missiveComponent.isUsers && !missiveComponent.isBroadcast">
                     Computing proof of work
                   </span>
                 </small>
-                <div class="progress" ng-if="messageComponent.isUsers && !messageComponent.isBroadcast">
+                <div class="progress" ng-if="missiveComponent.isUsers && !missiveComponent.isBroadcast">
                   <div
                     class="progress-bar"
                     role="progressbar"
-                    style="width:{{messageComponent.powProgress * 100}}%"
+                    style="width:{{missiveComponent.powProgress * 100}}%"
                     aria-valuenow="10"
                     aria-valuemin="0"
                     aria-valuemax="100"
