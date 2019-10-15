@@ -5,12 +5,9 @@ const client = new pollenium.Client({
     `${wsProtocol}://begonia-us-1.herokuapp.com`,
     `${wsProtocol}://begonia-eu-1.herokuapp.com`,
   ],
-  bootstrapOffersTimeout: 0,
-  signalTimeout: 5,
-  friendshipsMax: 6,
   Worker: Worker,
   WebSocket: WebSocket,
-  hashcashWorkerUrl: './lib/pollenium-anemone/hashcash-worker.js'
+  hashcashWorkerUrl: './browser/pollenium-anemone/hashcash-worker.js'
 })
 const applicationId = pollenium.Bytes.fromUtf8('pollenboard').getPaddedLeft(32)
 
