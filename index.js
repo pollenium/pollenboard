@@ -7,7 +7,7 @@ const client = new pollenium.Client({
   ],
   Worker: Worker,
   WebSocket: WebSocket,
-  hashcashWorkerUrl: './browser/pollenium-anemone/hashcash-worker.js'
+  hashcashWorkerUrl: './lib/pollenium-anemone/hashcash-worker.js'
 })
 const applicationId = pollenium.Bytes.fromUtf8('pollenboard').getPaddedLeft(32)
 
